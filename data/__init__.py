@@ -1,0 +1,1 @@
+from .default_categories import DEFAULT_CATEGORIES
