@@ -8,18 +8,17 @@ from data import config, DEFAULT_CATEGORIES
 
 
 class Database:
-    def __init__(self, pool):
-        self.pool: Optional[Pool] = pool
+    def __init__(self):
+        self.pool: Optional[Pool] = None
 
-    @classmethod
-    async def create_pool(cls):
-        pool = await asyncpg.create_pool(
+    async def create_pool(self):
+        self.pool = await asyncpg.create_pool(
             user=config.DB_USER,
             password=config.DB_PASS,
-            host=config.DB_HOST,
+            port=config.DB_HOST,
+            host='db',
             database=config.DB_NAME
         )
-        return cls(pool)
 
     async def execute(self, command: str, *args, fetch_all=False, fetch_row=False,
                       fetch_val=False, execute=False):
