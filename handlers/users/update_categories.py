@@ -17,7 +17,8 @@ from states.categories import DeleteCategory, AddCategory
 @dp.message_handler(Text(equals="Категории"))
 async def show_all_categories(message: types.Message, state: FSMContext, show_info=True):
     message_text = "Ваши категории:"
-    user_tg_id = (await state.get_data()).get("user_tg_id")
+    user_tg_id = message.from_user.id
+    await state.update_data(user_tg_id=user_tg_id)
 
     user_categories_lst: List[str] = await db.get_user_categories(user_tg_id)
     for index, category in enumerate(user_categories_lst):
@@ -83,7 +84,8 @@ async def add_category(call: types.CallbackQuery):
 @dp.message_handler(state=AddCategory.write_new_category_name)
 async def category_added(message: types.Message, state: FSMContext):
     new_category_name = message.text
-    user_tg_id = (await state.get_data()).get("user_tg_id")
+    user_tg_id = message.from_user.id
+    await state.update_data(user_tg_id=user_tg_id)
 
     if await db.add_user_category(user_tg_id, new_category_name):
         await message.answer(f"Категория {new_category_name} успешно создана")

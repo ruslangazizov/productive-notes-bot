@@ -16,6 +16,4 @@ async def bot_echo(message: types.Message):
 @dp.message_handler(state="*", content_types=types.ContentTypes.ANY)
 async def bot_echo_all(message: types.Message, state: FSMContext):
     state = await state.get_state()
-    await message.answer(f"Эхо в состоянии <code>{state}</code>.\n"
-                         f"\nСодержание сообщения:\n"
-                         f"<code>{message}</code>")
+    await message.answer("Пожалуйста, нажмите на одну из предложенных кнопок")

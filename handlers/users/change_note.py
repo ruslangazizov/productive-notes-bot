@@ -94,7 +94,8 @@ async def save_changed_note(message: types.Message, state: FSMContext):
     old_note_text = await get_old_note_text(state)
     changed_note_text = message.text
     note_category, note_number = await get_category_and_number(state)
-    user_tg_id = (await state.get_data()).get("user_tg_id")
+    user_tg_id = message.from_user.id
+    await state.update_data(user_tg_id=user_tg_id)
 
     await db.update_note_text(old_note_text, changed_note_text, user_tg_id, note_category)
 

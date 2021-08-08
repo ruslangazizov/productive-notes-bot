@@ -49,7 +49,8 @@ async def add_note(call: types.CallbackQuery, state: FSMContext):
 async def save_note(message: types.Message, state: FSMContext):
     category = (await state.get_data()).get("category_name")
     note_text = message.text
-    user_tg_id = (await state.get_data()).get("user_tg_id")
+    user_tg_id = message.from_user.id
+    await state.update_data(user_tg_id=user_tg_id)
 
     await db.add_note(user_tg_id, category, note_text)
 
