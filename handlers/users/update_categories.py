@@ -27,8 +27,7 @@ async def show_all_categories(message: types.Message, state: FSMContext, show_in
         message_text += f"\n{index + 1}. <b>{category}</b> (кол-во заметок: {count_of_notes_in_category})"
 
     if show_info:
-        await message.answer("Нажмите <b>Назад</b>, если хотите вернуться на предыдущий шаг "
-                             "и <b>Главное меню</b>, если хотите вернуться в главное меню",
+        await message.answer("Чтобы вернуться в главное меню, нажмите <b>Главное меню</b>",
                              reply_markup=back_menu)
     await message.answer(message_text, reply_markup=categories_actions)
 
@@ -71,7 +70,6 @@ async def delete_category(call: types.CallbackQuery, state: FSMContext):
 async def deny_delete_category(call: types.CallbackQuery, state: FSMContext):
     await reset_state_saving_user_id(state)
     await show_all_categories(call.message, state, False)
-    # и "Главное меню", и "Назад" должны вести на главное меню
 
 
 @dp.callback_query_handler(confirmation_callback.filter(action_name="add"))
@@ -94,4 +92,3 @@ async def category_added(message: types.Message, state: FSMContext):
 
     await reset_state_saving_user_id(state)
     await show_all_categories(message, state, False)
-    # и "Главное меню", и "Назад" должны вести на главное меню

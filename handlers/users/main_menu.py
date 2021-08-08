@@ -24,8 +24,7 @@ async def choose_category(message: types.Message):
         categories_buttons = get_categories_buttons("Показать все заметки",
                                                     categories=user_categories_lst)
     await message.answer("Выберите категорию", reply_markup=categories_buttons)
-    await message.answer("Нажмите <b>Назад</b>, если хотите вернуться на предыдущий шаг "
-                         "и <b>Главное меню</b>, если хотите вернуться в главное меню",
+    await message.answer("Чтобы вернуться в главное меню, нажмите <b>Главное меню</b>",
                          reply_markup=back_menu)
     if message.text == "Добавить заметку":
         await AddNote.choose_category.set()

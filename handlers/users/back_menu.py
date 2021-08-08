@@ -14,8 +14,3 @@ async def back_to_main_menu(message: types.Message, state: FSMContext):
 
     await message.delete()
     await message.answer("<b>Главное меню</b>", reply_markup=main_menu)
-
-
-@dp.message_handler(Text(equals="Назад"), state="*")
-async def back_to_main_menu(message: types.Message, state: FSMContext):
-    pass  # TODO: реализовать
