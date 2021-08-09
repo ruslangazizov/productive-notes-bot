@@ -26,6 +26,8 @@ async def choose_note(call: types.CallbackQuery, state: FSMContext, category: st
 
     notes_in_category: List[str] = await db.get_user_notes_in_category(user_tg_id, category)
     number_of_notes = len(notes_in_category)
+    if number_of_notes == 0:
+        message_text = f"Нет заметок в категории <b>{category}</b>"
     for index, note in enumerate(notes_in_category):
         note_text = note[:45]
         if len(note) > 45:
