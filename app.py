@@ -21,6 +21,7 @@ async def on_startup(dispatcher):
     await set_default_commands(dispatcher)
 
     # Уведомляет про запуск
+    logging.info("Уведомляем админов о том, что бот запустился")
     await on_startup_notify(dispatcher)
 
 
