@@ -11,10 +11,10 @@
 ### Here's how it looks:
 
 <p align="middle">
-  <img src="https://hsto.org/getpro/freelansim/allfiles/85/851/851015/5784193b97.png" width="40%" />
-  <img src="https://hsto.org/getpro/freelansim/allfiles/85/851/851017/d4c1d57269.png" width="40%" />
-  <img src="https://habrastorage.org/getpro/freelansim/allfiles/85/851/851019/c4284c704b.png" width="40%" />
-  <img src="https://habrastorage.org/getpro/freelansim/allfiles/85/851/851021/6cba9e8c0c.png" width="40%" />
+  <img src="https://hsto.org/getpro/freelansim/allfiles/85/851/851015/5784193b97.png" width="49%" />
+  <img src="https://hsto.org/getpro/freelansim/allfiles/85/851/851017/d4c1d57269.png" width="49%" />
+  <img src="https://habrastorage.org/getpro/freelansim/allfiles/85/851/851019/c4284c704b.png" width="49%" />
+  <img src="https://habrastorage.org/getpro/freelansim/allfiles/85/851/851021/6cba9e8c0c.png" width="49%" />
 </p>
 
 ## Tech
