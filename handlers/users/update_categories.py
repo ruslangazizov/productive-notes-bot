@@ -40,6 +40,7 @@ async def show_all_categories(message: Union[types.Message, CallbackQuery], stat
 
 @dp.callback_query_handler(confirmation_callback.filter(action_name="delete"))
 async def choose_category_to_delete(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     message_text = "Выберите категорию, которую хотите удалить:"
     user_tg_id = (await state.get_data()).get("user_tg_id")
 
@@ -62,6 +63,7 @@ async def delete_category_confirmation(call: types.CallbackQuery, state: FSMCont
 @dp.callback_query_handler(confirmation_callback.filter(action_name="yes"),
                            state=DeleteCategory.delete_confirmation)
 async def delete_category(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     category = await get_category(state)
     user_tg_id = (await state.get_data()).get("user_tg_id")
 
@@ -74,12 +76,14 @@ async def delete_category(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(confirmation_callback.filter(action_name="no"),
                            state=DeleteCategory.delete_confirmation)
 async def deny_delete_category(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     await reset_state_saving_user_id(state)
     await show_all_categories(call, state, False)
 
 
 @dp.callback_query_handler(confirmation_callback.filter(action_name="add"))
 async def add_category(call: types.CallbackQuery):
+    await call.message.delete()
     message_text = "Введите название категории, которую вы хотите добавить"
     await call.message.answer(message_text)
     await AddCategory.write_new_category_name.set()

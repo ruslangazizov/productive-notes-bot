@@ -4,6 +4,8 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from handlers.users.main_menu import get_and_save_category, get_category
+from handlers.users.start import reset_state_saving_user_id
+from keyboards.default import main_menu
 from keyboards.inline.callback_data import number_callback
 from keyboards.inline.numbers import get_number_buttons
 from loader import dp, db
@@ -14,7 +16,7 @@ NUMBER_OF_BUTTONS_IN_INLINE_KEYBOARD = 9
 
 @dp.callback_query_handler(state=ChangeNote.choose_category)
 async def send_last_notes(call: types.CallbackQuery, state: FSMContext):
-    category = await get_and_save_category(call, state, False)
+    category = await get_and_save_category(call, state)
     user_tg_id = (await state.get_data()).get("user_tg_id")
 
     message_text = f"Последние заметки в категории <b>{category}</b>:"
@@ -80,7 +82,7 @@ async def show_note_full(call: types.CallbackQuery, state: FSMContext):
     notes_in_category: List[str] = await db.get_user_notes_in_category(user_tg_id, category)
 
     note_text = notes_in_category[note_number - 1]
-    message_text = f"<b>Полный текст заметки</b>:\n\n" \
+    message_text = f"<b>Полный текст заметки</b>: (категория - <b>{category}</b>)\n\n" \
                    f"{note_text}\n\n" \
                    f"<b>Введите новый текст заметки</b>"
 
@@ -99,13 +101,14 @@ async def save_changed_note(message: types.Message, state: FSMContext):
 
     await db.update_note_text(old_note_text, changed_note_text, user_tg_id, note_category)
 
-    message_text = f"Заметка №{note_number} из категории <b>{note_category}</b> успешно сохранена"
-    await message.answer(message_text)
+    message_text = f"Заметка №{note_number} из категории <b>{note_category}</b> успешно обновлена"
+    await message.answer(message_text, reply_markup=main_menu)
+    await reset_state_saving_user_id(state)
 
 
 async def get_and_save_number(call: types.CallbackQuery, state: FSMContext):
     await call.answer()
-    # await call.message.delete()
+    await call.message.delete()
 
     number = int(call.data.split(':')[-1])
     await state.update_data(number=number)

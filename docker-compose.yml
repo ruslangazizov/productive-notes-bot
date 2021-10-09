@@ -24,22 +24,14 @@ services:
     restart: always
     networks:
       - botnet
+    environment:
+      WEBAPP_PORT: 3001
     env_file:
       - ".env"
     volumes:
      - .:/src
     depends_on:
       - db
-
-  master:
-    image: redis:5.0.8
-    restart: always
-    command: redis-server
-    network_mode: host
-    ports:
-      - 6379:6379
-    depends_on:
-      - tgbot
 
 networks:
   botnet:

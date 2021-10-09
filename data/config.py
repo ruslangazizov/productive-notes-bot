@@ -12,3 +12,14 @@ DB_USER = env.str("DB_USER")
 DB_PASS = env.str("DB_PASS")
 DB_NAME = env.str("DB_NAME")
 DB_HOST = env.str("DB_HOST")
+
+WEBHOOK_HOST = f"https://{IP}"
+WEBHOOK_PORT = 8443
+WEBHOOK_PATH = f"/bot/{BOT_TOKEN}"
+WEBHOOK_URL = f"{WEBHOOK_HOST}:{WEBHOOK_PORT}{WEBHOOK_PATH}"
+
+WEBAPP_HOST = '0.0.0.0'
+WEBAPP_PORT = env.str("WEBAPP_PORT")
+
+WEBHOOK_SSL_CERT = "webhook_cert.pem"
+WEBHOOK_SSL_PRIV = "webhook_pkey.pem"

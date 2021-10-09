@@ -18,11 +18,11 @@ from states.notes import DeleteNote
 @dp.callback_query_handler(state=DeleteNote.choose_category)
 async def choose_note(call: types.CallbackQuery, state: FSMContext, category: str = None):
     if not category:
-        category = await get_and_save_category(call, state, send_msg_with_category=True)
+        category = await get_and_save_category(call, state)
     else:
         await state.update_data(category_name=category)
     user_tg_id = (await state.get_data()).get("user_tg_id")
-    message_text = "Выберите заметку:"
+    message_text = "Выберите заметку в категории <b>{category}</b>:"
 
     notes_in_category: List[str] = await db.get_user_notes_in_category(user_tg_id, category)
     number_of_notes = len(notes_in_category)
@@ -58,6 +58,7 @@ async def delete_note_confirmation(call: types.CallbackQuery, state: FSMContext)
 @dp.callback_query_handler(confirmation_callback.filter(action_name="yes"),
                            state=DeleteNote.delete_confirmation)
 async def delete_note(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     category = await get_category(state)
     state_data = await state.get_data()
     note_text = state_data.get("note_text")
@@ -65,7 +66,7 @@ async def delete_note(call: types.CallbackQuery, state: FSMContext):
 
     await db.delete_note(user_tg_id, category, note_text)
 
-    short_note_text = note_text[:15] + "..." if len(note_text) > 15 else note_text
+    short_note_text = note_text[:20] + "..." if len(note_text) > 20 else note_text
     await call.message.answer(f"Заметка <b>{short_note_text}</b> успешно удалена",
                               reply_markup=main_menu)
     await reset_state_saving_user_id(state)
@@ -74,6 +75,7 @@ async def delete_note(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(confirmation_callback.filter(action_name="no"),
                            state=DeleteNote.delete_confirmation)
 async def deny_delete_note(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     category = await get_category(state)
     await reset_state_saving_user_id(state)
 

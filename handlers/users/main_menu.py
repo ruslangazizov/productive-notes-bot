@@ -38,7 +38,7 @@ async def choose_category(message: types.Message):
 
 @dp.callback_query_handler(state=AddNote.choose_category)
 async def add_note(call: types.CallbackQuery, state: FSMContext):
-    category = await get_and_save_category(call, state, True)
+    category = await get_and_save_category(call, state)
 
     await call.message.answer(f"Введите новую заметку для категории <b>{category}</b>")
     await AddNote.add_note.set()
@@ -86,6 +86,7 @@ async def show_all_notes_in_all_categories_short(call: types.CallbackQuery, stat
 @dp.callback_query_handler(category_callback.filter(category_name="show_all_button"),
                            state=ShowNote.show_all_notes_in_all_categories)
 async def show_all_notes_in_all_categories_full(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
     message_text = "<b>Все заметки:</b>"
     user_tg_id = (await state.get_data()).get("user_tg_id")
 
@@ -138,14 +139,12 @@ async def show_all_notes_in_category(call: types.CallbackQuery, state: FSMContex
     await ShowNote.showed_all_notes_in_one_category.set()
 
 
-async def get_and_save_category(call: types.CallbackQuery, state: FSMContext, send_msg_with_category=False):
+async def get_and_save_category(call: types.CallbackQuery, state: FSMContext):
     await call.answer()
     await call.message.delete()
 
     category = call.data.split(':')[-1]
     await state.update_data(category_name=category)
-    if send_msg_with_category:
-        await call.message.answer(f"Категория: <b>{category}</b>")
 
     return category
 
